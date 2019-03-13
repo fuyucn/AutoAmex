@@ -125,3 +125,42 @@ def getBalance(driver):
   except:
     return "Error"
 
+def collectCards(driver):
+        # open card slist
+    card_button_element = driver.find_element_by_xpath(
+        "//span[@class='card-stack-container']/span[@class='card-stack']/button")
+    card_button_element.click()
+    time.sleep(1)
+
+    if driver.find_element_by_xpath(
+            '//*[@title="View All"]'):
+        driver.find_element_by_xpath(
+            '//*[@title="View All"]').click()
+
+    # read card names
+    card_list = driver.find_element_by_id('accounts')
+
+    cards_name_elements = card_list.find_elements_by_class_name(
+        'heading-2')
+
+    card_names = []
+    for i in cards_name_elements:
+        card_names.append(i.text)
+
+    # close cards list
+    driver.execute_script("arguments[0].click();", card_button_element)
+
+    return card_names
+
+
+def changeCard(driver, cardName):
+    card_button_element = driver.find_element_by_xpath(
+        "//span[@class='card-stack-container']/span[@class='card-stack']/button")
+    card_button_element.click()
+    time.sleep(2)
+
+    card_list = driver.find_element_by_id('accounts')
+    card_list_element = card_list.find_element_by_xpath("//section/header/section/div/div/div/p[contains(text(),'" +
+                                                        cardName + "')]")
+    card_list_element.click()
+    print("clicked " + cardName)
